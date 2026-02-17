@@ -3,263 +3,247 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fake Money Roulette</title>
+  <title>Simple Roulette</title>
   <style>
     :root {
-      --bg: #10141f;
-      --panel: #171d2b;
-      --panel-2: #20293d;
-      --text: #f2f4ff;
-      --muted: #aeb6d1;
-      --accent: #ffb347;
-      --good: #35d07f;
-      --bad: #ff6868;
-      --border: #2a3550;
+      --bg: #f5f5f5;
+      --panel: #ffffff;
+      --text: #111111;
+      --muted: #666666;
+      --border: #d9d9d9;
+      --red: #c93b3b;
+      --black: #222222;
+      --win: #1f7a1f;
+      --lose: #b42323;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
       display: grid;
       place-items: center;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      background: var(--bg);
       color: var(--text);
-      background:
-        radial-gradient(circle at top right, #28324a 0%, transparent 40%),
-        radial-gradient(circle at bottom left, #22334a 0%, transparent 40%),
-        var(--bg);
-      padding: 24px;
+      padding: 20px;
     }
 
     .app {
-      width: min(920px, 100%);
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: 24px;
-      background: color-mix(in srgb, var(--panel) 92%, black);
+      width: min(760px, 100%);
+      background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
-    }
-
-    @media (max-width: 860px) {
-      .app { grid-template-columns: 1fr; }
-    }
-
-    .wheel-wrap {
+      padding: 20px;
       display: grid;
-      place-items: center;
-      gap: 14px;
-    }
-
-    .pointer {
-      width: 0;
-      height: 0;
-      border-left: 16px solid transparent;
-      border-right: 16px solid transparent;
-      border-top: 28px solid var(--accent);
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,.4));
-      z-index: 2;
-      margin-bottom: -6px;
-    }
-
-    .wheel {
-      width: min(420px, 82vw);
-      aspect-ratio: 1;
-      border-radius: 50%;
-      border: 8px solid #f0d08b;
-      box-shadow: inset 0 0 18px rgba(0,0,0,.25), 0 10px 24px rgba(0,0,0,.45);
-      transition: transform 4.5s cubic-bezier(.12,.84,.15,1);
-      background:
-        conic-gradient(
-          #cc2f2f 0deg 30deg,
-          #1f1f1f 30deg 60deg,
-          #cc2f2f 60deg 90deg,
-          #1f1f1f 90deg 120deg,
-          #cc2f2f 120deg 150deg,
-          #1f1f1f 150deg 180deg,
-          #cc2f2f 180deg 210deg,
-          #1f1f1f 210deg 240deg,
-          #cc2f2f 240deg 270deg,
-          #1f1f1f 270deg 300deg,
-          #cc2f2f 300deg 330deg,
-          #1f1f1f 330deg 360deg
-        );
-      position: relative;
-      overflow: hidden;
-    }
-
-    .wheel::after {
-      content: "";
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: #f4f6ff;
-      border: 6px solid #d3b877;
-      position: absolute;
-      inset: 0;
-      margin: auto;
-      box-shadow: 0 0 0 6px rgba(0,0,0,.12);
-    }
-
-    .panel {
-      background: linear-gradient(180deg, var(--panel-2), #161d2d);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 18px;
-      display: grid;
-      gap: 12px;
-      align-content: start;
+      gap: 16px;
     }
 
     h1 {
       margin: 0;
-      font-size: 1.4rem;
-      letter-spacing: 0.3px;
+      font-size: 1.5rem;
     }
 
-    .muted { color: var(--muted); font-size: .95rem; margin: 0; }
+    .layout {
+      display: grid;
+      gap: 18px;
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+
+    @media (max-width: 760px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .wheel-shell {
+      position: relative;
+      width: min(320px, 80vw);
+      margin: 12px auto 0;
+    }
+
+    .pointer {
+      position: absolute;
+      left: 50%;
+      top: -10px;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 22px solid #111;
+      z-index: 2;
+    }
+
+    .wheel {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 3px solid #111;
+      background: conic-gradient(
+        var(--red) 0deg 30deg,
+        var(--black) 30deg 60deg,
+        var(--red) 60deg 90deg,
+        var(--black) 90deg 120deg,
+        var(--red) 120deg 150deg,
+        var(--black) 150deg 180deg,
+        var(--red) 180deg 210deg,
+        var(--black) 210deg 240deg,
+        var(--red) 240deg 270deg,
+        var(--black) 270deg 300deg,
+        var(--red) 300deg 330deg,
+        var(--black) 330deg 360deg
+      );
+      transition: transform 4s ease-out;
+      position: relative;
+    }
+
+    .wheel::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #111;
+      background: #fff;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+    }
+
+    .balance {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
 
     .row {
       display: grid;
-      gap: 8px;
+      gap: 6px;
     }
 
     label {
-      font-size: .92rem;
       color: var(--muted);
+      font-size: 0.95rem;
     }
 
-    input, select, button {
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: #121a2a;
-      color: var(--text);
-      padding: 10px 12px;
-      font-size: 1rem;
-    }
-
+    input,
     button {
-      background: linear-gradient(180deg, #f7c165, #e29f2f);
-      color: #2d1d00;
-      font-weight: 700;
-      border-color: #d89324;
-      cursor: pointer;
-      transition: transform .08s ease;
+      font: inherit;
+      padding: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
     }
 
-    button:disabled {
-      opacity: .5;
-      cursor: not-allowed;
-    }
-
-    button:active { transform: translateY(1px); }
-
-    .stats {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+    .color-pick {
+      display: flex;
       gap: 10px;
     }
 
-    .stat {
-      background: #101828;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px;
+    .color-pick button {
+      flex: 1;
     }
 
-    .stat .k { font-size: .8rem; color: var(--muted); }
-    .stat .v { font-size: 1.2rem; font-weight: 700; margin-top: 3px; }
-
-    .result {
-      min-height: 30px;
+    .color-pick button.active[data-color="red"] {
+      border-color: var(--red);
+      color: var(--red);
       font-weight: 700;
     }
 
-    .result.win { color: var(--good); }
-    .result.lose { color: var(--bad); }
+    .color-pick button.active[data-color="black"] {
+      border-color: #000;
+      color: #000;
+      font-weight: 700;
+    }
 
-    .hint {
-      font-size: .86rem;
-      color: var(--muted);
-      margin: 0;
+    #spinBtn {
+      border-color: #111;
+      font-weight: 700;
+    }
+
+    #spinBtn:disabled {
+      color: #888;
+      border-color: var(--border);
+    }
+
+    .result {
+      min-height: 24px;
+      font-weight: 700;
+    }
+
+    .result.win {
+      color: var(--win);
+    }
+
+    .result.lose {
+      color: var(--lose);
     }
   </style>
 </head>
 <body>
   <main class="app">
-    <section class="wheel-wrap">
-      <div class="pointer" aria-hidden="true"></div>
-      <div class="wheel" id="wheel" aria-label="Roulette wheel"></div>
-      <p class="hint">Bet on <strong>red</strong> or <strong>black</strong>. Win doubles your bet.</p>
-    </section>
+    <h1>Roulette (Fake Money)</h1>
 
-    <section class="panel">
-      <h1>Fake Money Roulette</h1>
-      <p class="muted">Start with any amount, place a bet, then spin.</p>
+    <section class="layout">
+      <div class="wheel-shell">
+        <div class="pointer" aria-hidden="true"></div>
+        <div class="wheel" id="wheel" aria-label="Roulette wheel"></div>
+      </div>
 
-      <div class="stats">
-        <div class="stat">
-          <div class="k">Balance</div>
-          <div class="v" id="balanceDisplay">$100</div>
+      <div class="controls">
+        <div class="balance" id="balanceDisplay">Balance: $100</div>
+
+        <div class="row">
+          <label for="betInput">Amount to bet</label>
+          <input id="betInput" type="number" min="1" step="1" value="10" />
         </div>
-        <div class="stat">
-          <div class="k">Current Bet</div>
-          <div class="v" id="betDisplay">$0</div>
+
+        <div class="row">
+          <label>Pick a color</label>
+          <div class="color-pick">
+            <button type="button" class="pick active" data-color="red">Red</button>
+            <button type="button" class="pick" data-color="black">Black</button>
+          </div>
         </div>
-      </div>
 
-      <div class="row">
-        <label for="moneyInput">Set/Reset fake money</label>
-        <input id="moneyInput" type="number" min="1" step="1" value="100" />
-        <button id="setMoneyBtn" type="button">Set Balance</button>
+        <button id="spinBtn" type="button">Spin</button>
+        <div class="result" id="result"></div>
       </div>
-
-      <div class="row">
-        <label for="betInput">Bet amount</label>
-        <input id="betInput" type="number" min="1" step="1" value="10" />
-      </div>
-
-      <div class="row">
-        <label for="colorSelect">Choose color</label>
-        <select id="colorSelect">
-          <option value="red">Red</option>
-          <option value="black">Black</option>
-        </select>
-      </div>
-
-      <button id="spinBtn" type="button">Spin</button>
-      <div class="result" id="result"></div>
     </section>
   </main>
 
   <script>
     const wheel = document.getElementById("wheel");
     const balanceDisplay = document.getElementById("balanceDisplay");
-    const betDisplay = document.getElementById("betDisplay");
-    const moneyInput = document.getElementById("moneyInput");
-    const setMoneyBtn = document.getElementById("setMoneyBtn");
     const betInput = document.getElementById("betInput");
-    const colorSelect = document.getElementById("colorSelect");
     const spinBtn = document.getElementById("spinBtn");
     const resultEl = document.getElementById("result");
+    const pickButtons = [...document.querySelectorAll(".pick")];
 
     const SEGMENTS = 12;
     const SEGMENT_ANGLE = 360 / SEGMENTS;
     let balance = 100;
     let currentRotation = 0;
     let spinning = false;
+    let pickedColor = "red";
+
+    function mod(n, m) {
+      return ((n % m) + m) % m;
+    }
 
     function fmt(amount) {
       return "$" + Math.floor(amount);
     }
 
-    function updateUI(bet = 0) {
-      balanceDisplay.textContent = fmt(balance);
-      betDisplay.textContent = fmt(bet);
+    function updateUI() {
+      balanceDisplay.textContent = `Balance: ${fmt(balance)}`;
       spinBtn.disabled = spinning || balance <= 0;
     }
 
@@ -268,23 +252,18 @@
       resultEl.className = "result" + (type ? " " + type : "");
     }
 
-    setMoneyBtn.addEventListener("click", () => {
-      const amount = Number(moneyInput.value);
-      if (!Number.isFinite(amount) || amount < 1) {
-        setResult("Enter a valid starting amount (1 or more).", "lose");
-        return;
-      }
-      balance = Math.floor(amount);
-      setResult("Balance reset.");
-      updateUI();
+    pickButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        pickedColor = btn.dataset.color;
+        pickButtons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+      });
     });
 
     spinBtn.addEventListener("click", () => {
       if (spinning) return;
 
       const bet = Math.floor(Number(betInput.value));
-      const pick = colorSelect.value;
-
       if (!Number.isFinite(bet) || bet < 1) {
         setResult("Enter a valid bet amount.", "lose");
         return;
@@ -295,38 +274,35 @@
       }
 
       spinning = true;
-      updateUI(bet);
+      updateUI();
       setResult("Spinning...");
 
       const landedIndex = Math.floor(Math.random() * SEGMENTS);
       const landedColor = landedIndex % 2 === 0 ? "red" : "black";
 
-      const pointerAngle = 270;
-      const segmentCenter = landedIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
-      const extraTurns = 5 + Math.floor(Math.random() * 3);
-      const target = extraTurns * 360 + (pointerAngle - segmentCenter);
+      const landedCenter = landedIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
+      const desiredAngleAtTop = mod(-90 - landedCenter, 360);
+      const currentAngle = mod(currentRotation, 360);
+      const angleToTravel = mod(desiredAngleAtTop - currentAngle, 360);
+      const fullTurns = 5 + Math.floor(Math.random() * 2);
 
-      currentRotation += target;
+      currentRotation += fullTurns * 360 + angleToTravel;
       wheel.style.transform = `rotate(${currentRotation}deg)`;
 
       window.setTimeout(() => {
-        const won = pick === landedColor;
+        const won = pickedColor === landedColor;
+
         if (won) {
           balance += bet;
-          setResult(`Landed on ${landedColor}. You win ${fmt(bet)}!`, "win");
+          setResult(`Landed on ${landedColor}. You won ${fmt(bet)}.`, "win");
         } else {
-          balance -= bet;
-          setResult(`Landed on ${landedColor}. You lose ${fmt(bet)}.`, "lose");
-        }
-
-        if (balance <= 0) {
           balance = 0;
-          setResult("You are out of fake money. Set a new balance to keep playing.", "lose");
+          setResult(`Landed on ${landedColor}. You lost everything.`, "lose");
         }
 
         spinning = false;
         updateUI();
-      }, 4600);
+      }, 4100);
     });
 
     updateUI();
