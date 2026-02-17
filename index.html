@@ -278,7 +278,7 @@
       setResult("Spinning...");
 
       const landedIndex = Math.floor(Math.random() * SEGMENTS);
-      const landedColor = landedIndex % 2 === 0 ? "red" : "black";
+      const landedColor = landedIndex % 2 === 0 ? "black" : "red";
 
       const landedCenter = landedIndex * SEGMENT_ANGLE + SEGMENT_ANGLE / 2;
       const desiredAngleAtTop = mod(-90 - landedCenter, 360);
@@ -296,8 +296,8 @@
           balance += bet;
           setResult(`Landed on ${landedColor}. You won ${fmt(bet)}.`, "win");
         } else {
-          balance = 0;
-          setResult(`Landed on ${landedColor}. You lost everything.`, "lose");
+          balance -= bet;
+          setResult(`Landed on ${landedColor}. You lost ${fmt(bet)}.`, "lose");
         }
 
         spinning = false;
